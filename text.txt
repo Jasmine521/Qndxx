@@ -1,0 +1,376 @@
+HTTP/1.1 200 OK
+Date: Thu, 10 Nov 2022 00:17:59 GMT
+Content-Type: text/html; charset=UTF-8
+Vary: Accept-Encoding
+X-Powered-By: PHP/7.2.22
+Server: Lego Server
+X-Cache-Lookup: Cache Miss
+X-Cache-Lookup: Hit From Upstream Cluster
+Transfer-Encoding: chunked
+X-NWS-LOG-UUID: 12385896376834772491
+Connection: keep-alive
+X-Cache-Lookup: Cache Miss
+
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>青春上海“青年大学习”</title>
+  <link type="text/css" rel="stylesheet" href="assets/css/layui.css">
+  <link type="text/css" rel="stylesheet" href="assets/css/layer.css">
+  <link type="text/css" rel="stylesheet" href="assets/css/myanimate.css?v=636">
+  <link type="text/css" rel="stylesheet" href="assets/css/plugin.min.css?v=636">
+  <link type="text/css" rel="stylesheet" href="assets/css/all.css?v=636">
+  <link type="text/css" rel="stylesheet" href="assets/css/learn.css?v=636">
+  <link type="text/css" rel="stylesheet" href="assets/css/index.css?v=636">
+  <style type="text/css">
+  </style>
+</head>
+
+<body>
+  <!--loading-->
+  <div id="loadingWrapper" style="display:block">
+    <div id="loadingBase">
+      <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
+    </div>
+  </div>
+  <div class="index">
+    <div class="layui-carousel" id="index-carousel">
+      <div id="carousel-container" carousel-item>
+        <!-- 去掉首页大学习轮播 -->
+        <div class="carousel-item-img" style="background: url(assets/images/indexdj/swiper7.png) no-repeat center top;background-size: cover;">
+          <div class="stage-container" style="display: none;">
+            <p class="stage floating">加载中...</p>
+          </div>
+          <div class="note_score_text" style="display: none;">
+            <img src="assets/images/note.png" class="note_img_s">
+            <div class="note_score_"></div>
+          </div>
+          <div class="container_xuexi" onclick="goStudy1()">
+            <img class="btn_xuexi" src="assets/images/index/btn_xuexi.png?v=2" alt="立即学习">
+            <img src="assets/images/hand.png" class="hand_png btn_xuexi floating">
+          </div>
+        </div>
+        <!-- <div class="carousel-item-img" onclick="goDsdtFinal()" style="background: url(assets/images/index/swiper4_3_6.png?v=10) no-repeat center top;background-size: cover;">
+        </div> -->
+        <!-- <div class="carousel-item-img" onclick="goDsdt()" style="background: url(assets/images/index/swiper4_3_5.png?v=10) no-repeat center top;background-size: cover;">
+        </div>
+        <div class="carousel-item-img" onclick="goArticleStudy()" style="background: url(assets/images/index/swiper6_1.png?v=3) no-repeat center top;background-size: cover;">
+        </div> -->
+        <div class="carousel-item-img" style="background: url(assets/images/index/swiper3.png?v=10) no-repeat center top;background-size: cover;">
+          <div class="container_xuexi" onclick="goAnswerPhp()">
+            <img class="btn_xuexi" src="assets/images/index/btn_dati.png?v=2" alt="线上答题">
+            <img src="assets/images/hand.png" class="hand_png btn_xuexi floating">
+          </div>
+        </div>
+
+        <!-- <div class="carousel-item-img" style="background: url(assets/images/index/swiper4_1.jpg?v=10) no-repeat center top;background-size: cover;">
+        </div> -->
+        <div class="carousel-item-img" onclick="goLearn()" style="background: url(assets/images/index/swiper4_3.jpg?v=10) no-repeat center top;background-size: cover;">
+        </div>
+        <!-- 往期排行 -->
+        <div class="carousel-item-img" onclick="linkPage('ranking_past','?come=home')" style="background: url(assets/images/index/swiper5_1.jpg?v=10) no-repeat center top;background-size: cover;">
+        </div>
+      </div>
+      <div class="news">
+        <img class="img-news" src="assets/images/indexdj/news.png">
+        <div class="info-carousel flex-sx-center page_index_rollInfo" style="display:block;">
+          <div class="infos"></div>
+        </div>
+      </div>
+    </div>
+    <div class="indexItem">
+      <div class="indexItem-top">
+        <img class="title_learning" src="assets/images/indexdj/title_learning_4.png">
+        <img class="btn_more" src="assets/images/index/btn_more.png" onclick="linkPage('learn')">
+      </div>
+      <div class="indexItem-bot" id="list-content-ztkt"></div>
+      <div class="indexItem-bot" id="list-content-hot"></div>
+      <div class="indexItem-bot" id="list-content">
+      </div>
+    </div>
+    <div class="indexItem">
+      <div class="indexItem-top">
+        <img class="title_learning" src="assets/images/indexdj/title_learning_1.png">
+        <sapn style="position: absolute;right: 20vw;top: 4vw;color: #ffad5c;"></sapn>
+        <img class="btn_more" src="assets/images/index/btn_more.png" onclick="linkPage('ranking')">
+      </div>
+      <div class="rankingContainer">
+        <!-- 地区系统 -->
+        <div class="indexItem-bot">
+          <div class="learn-row">
+            <img class="learn-row-title" src="assets/images/indexdj/tab_img1.png?v=2">
+            <div class="learn-row-list">
+              <ul class="learn-row-listContainer" id="rank_diqu">
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- 宣传系统 -->
+        <div class="indexItem-bot">
+          <div class="learn-row">
+            <img class="learn-row-title" src="assets/images/indexdj/tab_img2.png?v=2">
+            <div class="learn-row-list">
+              <ul class="learn-row-listContainer" id="rank_xuanchuan">
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- 高校系统 -->
+        <div class="indexItem-bot">
+          <div class="learn-row">
+            <img class="learn-row-title" src="assets/images/indexdj/tab_img3.png?v=2">
+            <div class="learn-row-list">
+              <ul class="learn-row-listContainer" id="rank_gaoxiao">
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- 大口&在沪央企 青工系统-->
+        <div class="indexItem-bot">
+          <div class="learn-row">
+            <img class="learn-row-title" src="assets/images/indexdj/tab_img4_1.png?v=2">
+            <div class="learn-row-list">
+              <ul class="learn-row-listContainer" id="rank_yangqi">
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+                <li class="learn-row-item">
+                  <img class="learn-row-userImg" src="assets/images/index/logo.jpg">
+                  <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+                  <p class="learn-row-userScore">-</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 个人排行  -->
+      <div class="indexItem-bot" style="padding-bottom: 1vw;">
+        <img class="learn-row-title learn-row-title-user" src="assets/images/indexdj/tab_geren_l.png?v=2">
+        <ul class="learn-row-listContainer" id="rank_geren">
+          <li class="learn-row-item">
+            <img class="learn-row-userImg" src="assets/images/index/unkonw.png">
+            <p class="learn-row-userScore">-</p>
+            <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+            <p class="learn-row-node"><span style="color:#F1CEA4">暂无</span></p>
+          </li>
+          <li class="learn-row-item">
+            <img class="learn-row-userImg" src="assets/images/index/unkonw.png">
+            <p class="learn-row-userScore">-</p>
+            <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+            <p class="learn-row-node"><span style="color:#F1CEA4">暂无</span></p>
+          </li>
+          <li class="learn-row-item">
+            <img class="learn-row-userImg" src="assets/images/index/unkonw.png">
+            <p class="learn-row-userScore">-</p>
+            <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+            <p class="learn-row-node"><span style="color:#F1CEA4">暂无</span></p>
+          </li>
+          <li class="learn-row-item">
+            <img class="learn-row-userImg" src="assets/images/index/unkonw.png">
+            <p class="learn-row-userScore">-</p>
+            <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+            <p class="learn-row-node"><span style="color:#F1CEA4">暂无</span></p>
+          </li>
+          <li class="learn-row-item">
+            <img class="learn-row-userImg" src="assets/images/index/unkonw.png">
+            <p class="learn-row-userScore">-</p>
+            <p class="learn-row-userName"><span style="color:#F1CEA4">暂无</span></p>
+            <p class="learn-row-node"><span style="color:#F1CEA4">暂无</span></p>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- 去答题按钮 -->
+    <div class="gotoAnswer tossing" onclick="linkPage('answer')" style="display: block;">
+      <img class="btn_gotoAns" src="assets/images/index/btn_gotoAns.png">
+    </div>
+    <!-- 往期排行按钮 -->
+    <!-- <div class="rank_icon" onclick="linkPage('ranking_past','?come=home')" style="display: block;">
+      <img class="" src="assets/images/rank_icon.png">
+    </div> -->
+  </div>
+  <!-- <div class="botNav">
+    <img class="botNav-item" src="assets/images/index/btn_index.png" onclick="linkPage('index')" alt="首页">
+    <img class="botNav-item" src="assets/images/index/btn_learn_2.png" onclick="linkPage('learn')" alt="学习频道">
+    <img class="botNav-item" src="assets/images/index/btn_mall_2.png" onclick="linkPage('mall')" alt="积分商城">
+    <img class="botNav-item" src="assets/images/index/btn_mine_2.png" onclick="linkPage('mine')" alt="我的">
+  </div> -->
+  <div class="botNav" style="padding-bottom:3vw">
+    <div style='text-align:center;font-size:3.5vw;color:#ff6000'>
+      <img class="botNav-item" src="assets/images/indexdj/new-icon.png" onclick="linkPage('index')" alt="首页" style='width:12vw;height:unset'>
+      <div>首页</div>
+    </div>
+    <div style='text-align:center;font-size:3.5vw;'>
+      <img class="botNav-item" src="assets/images/indexdj/new-icon.png" onclick="linkPage('learn')" alt="学习频道" style='width:12vw;height:unset'>
+      <div>学习频道</div>
+    </div>
+    <div style='text-align:center;font-size:3.5vw;'>
+      <img class="botNav-item" src="assets/images/indexdj/new-icon.png" onclick="linkPage('mall')" alt="积分商城" style='width:12vw;height:unset'>
+      <div>积分商城</div>
+    </div>
+    <div style='text-align:center;font-size:3.5vw;'>
+      <img class="botNav-item" src="assets/images/indexdj/new-icon.png" onclick="linkPage('mine')" alt="我的" style='width:12vw;height:unset;'>
+      <div>我的</div>
+    </div>
+  </div>
+  <!-- 详情页面 -->
+  <div class="detials" id="detials" data-id="" style="display: none;">
+    <div class="detials-banner" id="detials-banner">
+    </div>
+    <div class="detials-content">
+      <p class="detials-content-title" id="detials-title"></p>
+      <p class="list-item-state" id="list-item-state"></p>
+      <div class="detials-content-container">
+        <div class="detials-content-item">
+          <img class="detials-content-icon" src="assets/images/index/icon-time.png" style="margin-top: 1vw;">
+          <span id="detials-startTime" class="dateTime"></span>
+        </div>
+        <div class="detials-content-item">
+          <img class="detials-content-icon" src="assets/images/index/icon-time.png" style="margin-top: 1vw;">
+          <span id="detials-endTime" class="dateTime"></span>
+        </div>
+        <div class="detials-content-item">
+          <img class="detials-content-icon" src="assets/images/index/icon-num.png" style="margin-top: 1vw;">
+          <span id="detials-num" class="dateTime"></span>
+        </div>
+      </div>
+      <div class="detials-content-container" style="display: none;">
+        <div class="detials-content-item">
+          <img class="detials-content-icon" src="assets/images/index/icon-details.png" style="margin-top: 2vw;">
+          <div class="detials-content-text detials-content-text-hdxq">
+            <span>详情</span>
+          </div>
+        </div>
+        <div class="detials-content-item">
+          <div class="detials-content-text detials-content-text-content">
+            <div id="detials-content"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 提示页面 -->
+  <div class="notice_page" style="display: none;">
+    <div class="np_main">
+      <img src="assets/images/icon_note.png" class="np_icon_note">
+      <div class="np_note">青年大学习网上团课今日系统升级，<br>去答题赚积分换好礼吧^_^</div>
+      <div class="np_btn_s">
+        <div class="np_btn_left">知道了</div>
+        <div class="np_btn_right">去答题</div>
+      </div>
+    </div>
+  </div>
+  <script src="https://res.wx.qq.com/open/js/jweixin-1.3.0.js"></script>
+  <script type="text/javascript" src="assets/js/layui.all.js"></script>
+  <script type="text/javascript" src="assets/js/layer.js"></script>
+  <script type="text/javascript" src="assets/js/plugin.min.js"></script>
+  <script type="text/javascript" src="assets/js/common.js?v=636"></script>
+  <script type="text/javascript" src="assets/js/all1.js?v=636"></script>
+  <script type="text/javascript" src="assets/js/index.js?v=636"></script>
+  <script type="text/javascript">
+    function goStudy1() {
+      if (strToTime(new Date()) < "2020-04-01 00:00:00") {
+        $(".notice_page").show();
+      } else {
+        // window.location.replace('learn.php?rom=%E7%BD%91%E4%B8%8A%E4%B8%BB%E9%A2%98%E5%9B%A2%E8%AF%BE');
+        window.location.replace('signUp-new.php?rom=1');
+      }
+    }
+
+    function goDsdt() {
+      window.location.replace('https://qcsh.h5yunban.com/qcsh-dt-lzqh/index.php');
+    }
+
+    function goDsdtFinal() {
+      window.location.replace('https://shqcsh.h5yunban.cn/qcsh-dsdt-finals/index.php');
+    }
+
+
+    function goArticleStudy() {
+      window.location.replace(
+        'https://mp.weixin.qq.com/s?__biz=MjM5MzY4ODcyMA==&mid=2657851073&idx=1&sn=d9eec2b7857471a075c0d4a8554fe8bb#wechat_redirect'
+      );
+    }
+    $(".np_btn_left").on("click", function() {
+      $(".notice_page").hide();
+    })
+    $(".np_btn_right").on("click", function() {
+      $(".notice_page").hide();
+      goAnswerPhp();
+    })
+
+    function goLearn() {
+      localStorage.setItem("lastQueryType", '“青年讲师团”微团课');
+      window.location.replace(
+        'learn.php?rom=%E2%80%9C%E9%9D%92%E5%B9%B4%E8%AE%B2%E5%B8%88%E5%9B%A2%E2%80%9D%E5%BE%AE%E5%9B%A2%E8%AF%BE');
+    }
+  </script>
+  <div style="display: none;">
+    <script type="text/javascript" src="https://v1.cnzz.com/z_stat.php?id=1278620053&web_id=1278620053"></script>
+  </div>
+</body>
+
+</html>

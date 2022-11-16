@@ -1,0 +1,342 @@
+/**
+  公共模块 青春上海“青年大学习”
+**/
+var accessToken = null;
+var layerPc = layui.layer;
+var flow = layui.flow;
+var element = layui.element;
+var form = layui.form;
+var layerMo = layer;
+var util = layui.util;
+var carousel = layui.carousel;
+var _pageSize = '10';
+var pageNum = '1';
+
+$(function () {
+  // 获取token
+  accessToken = getUrlParam('accessToken');
+  if (valueIsEmpty(accessToken)) {
+    if (valueIsEmpty(localStorage.getItem("accessToken"))) {
+      getAccessToken()
+      return false;
+    } else {
+      accessToken = localStorage.getItem("accessToken");
+    };
+  } else {
+    localStorage.setItem("accessToken", accessToken);
+  }
+  setFixbar();
+  get_mine();
+});
+
+//微信登录
+function getAccessToken() {
+  window.location.replace('./cgi-bin/login/we-chat?callback=' + encodeURIComponent(getURIWithoutAccessToken()));
+  // if (-1 == window.location.host.search("h5yunban.c")) {
+  //   window.location.replace('./cgi-bin/login/we-chat/test?callback=' + encodeURIComponent(getURIWithoutAccessToken()));
+  // } else {
+  //   window.location.replace('./cgi-bin/login/v2/wechat?callback=' + encodeURIComponent(getURIWithoutAccessToken())); // 
+  // }
+}
+
+//获取地址，不带参数
+function getURIWithoutAccessToken() {
+  var currentURI = window.location.href.split('?')[0];
+  var pars = window.location.href.split('?')[1];
+  var j = 0;
+  if (pars != undefined && pars.length > 0) {
+    pars_ = pars.split('&');
+    for (var i = 0; i <= pars_.length - 1; i++) {
+      var item = pars_[i];
+      var items_ = item.split('=');
+      if (items_.length > 0 && items_[0] != "accessToken") {
+        if (j == 0) {
+          currentURI = currentURI + "?" + items_[0] + "=" + items_[1];
+        } else {
+          currentURI = currentURI + "&" + items_[0] + "=" + items_[1];
+        }
+        j = j + 1;
+      }
+    }
+  }
+  return currentURI;
+};
+
+//个人信息和是否关注
+function get_mine() {
+  let data = {
+    '_url': '/user-api/info?accessToken=' + accessToken
+  };
+  request('GET', data, true,
+    function (res) {
+      requestCallBack(res, {
+        success: function (res) {
+          localStorage.setItem("userInfo", JSON.stringify(res.result));
+          console.log(accessToken + '，阅读推文：' + res.result.readed)
+          if (!res.result.readed) {
+            console.log('未读图文跳转');
+            console.log(window.location.href);
+            var href_ = window.location.href.split(".php")[0];
+            var href_c = href_.split("youth-learning/")[1];
+            console.log(href_c);
+            if (href_c == "signUp_jstq" || href_c == "signUp_pdqn" || href_c == "signUp_yp") {
+
+            } else {
+              //window.location.replace('forward_tw.php');
+            }
+          }
+          $('#loadingWrapperBase').hide();
+        },
+        error: function (res) {
+          if (res.status == 403) {
+            getAccessToken();
+            return;
+          } else {
+            $('#loadingWrapperBase').hide();
+            layerPc.msg(res.message, {
+              icon: 2
+            });
+          }
+        }
+      });
+    })
+};
+
+//返回顶部
+function backTop() {
+  $('html,body').animate({
+    scrollTop: 0
+  }, 300)
+};
+
+//键盘回弹优化
+$('input,textarea').on('blur', function () {
+  window.scroll(0, 0);
+});
+$('select').on('change', function () {
+  window.scroll(0, 0);
+});
+
+//页面跳转
+function linkPage(route = null, key = '') {
+  if (!route) {
+    layerPc.msg("本模块暂未开放", {
+      icon: 4
+    });
+    return false;
+  }
+  window.location.replace(route + '.php' + key)
+};
+
+//href跳转
+function linkUri(uri) {
+  window.location.href = uri;
+};
+
+//跳转
+function linkUriOut(ele) {
+  var uri = $(ele).attr('data-uri');
+  window.location.href = uri;
+};
+
+//自定义弹窗
+function showMyTips(title = '操作成功', log = '', time = 3000) {
+  if ($('body').find('.myTips').length == 0) {
+    var $html = '<div class="myTips">\n' +
+      '<p class="myTips_title">' + title + '</p>\n' +
+      '<p class="myTips_log">' + log + '</p>\n' +
+      '</div>';
+    $('body').append($html);
+  } else {
+    $('.myTips_title').text(title);
+    $('.myTips_log').text(log);
+  };
+  $('.myTips').fadeIn('fast');
+  setTimeout(function () {
+    $('.myTips').fadeOut('fast');
+  }, time)
+};
+
+function getConfig(option) {
+  $.ajax({
+    type: 'GET',
+    url: 'wx-share.php?url=' + encodeURIComponent(location.href.split('#')[0]),
+    dataType: 'json',
+    success: function (data) {
+      wx.config({
+        debug: false,
+        // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: data.appId,
+        // 必填，公众号的唯一标识
+        timestamp: data.timestamp.toString(),
+        // 必填，生成签名的时间戳
+        nonceStr: data.nonceStr,
+        // 必填，生成签名的随机串
+        signature: data.signature,
+        // 必填，签名，见附录1
+        jsApiList: ["chooseImage", "getLocalImgData", "onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo", "uploadImage", "translateVoice", "hideMenuItems", "previewImage"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      });
+      share()
+    },
+    error: function (xhr, type) {}
+  });
+}
+
+var jssdkConfig = {
+  title: "青春上海“青年大学习”",
+  desc: "快来一起学习吧~",
+  link: 'https://qcsh.h5yunban.com/youth-learning/index.php',
+  // 分享链接
+  imgUrl: 'https://qcsh.h5yunban.com/youth-learning/assets/images/index/share.png?v=632',
+  // 分享图片
+  type: 'link',
+  //link, music, video
+  dataUrl: '',
+  monitor: 'false',
+  success: function () {},
+  cancel: function () {}
+};
+
+function share() {
+  wx.ready(function () {
+    wx.hideMenuItems({
+      menuList: [
+        "menuItem:copyUrl", // 复制链接
+        "menuItem:openWithQQBrowser", // 在QQ浏览器中打开
+        "menuItem:openWithSafari" // 在Safari中打开
+      ] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮
+    });
+    wx.onMenuShareTimeline({
+      title: jssdkConfig.desc,
+      link: jssdkConfig.link,
+      imgUrl: jssdkConfig.imgUrl,
+      success: jssdkConfig.success,
+      cancel: jssdkConfig.cancel
+    });
+    wx.onMenuShareAppMessage({
+      title: jssdkConfig.title,
+      desc: jssdkConfig.desc,
+      link: jssdkConfig.link,
+      imgUrl: jssdkConfig.imgUrl,
+      type: (jssdkConfig.type || "link"),
+      dataUrl: (jssdkConfig.dataUrl || ""),
+      success: jssdkConfig.success,
+      cancel: jssdkConfig.cancel
+    });
+    wx.onMenuShareQQ({
+      title: jssdkConfig.title,
+      desc: jssdkConfig.desc,
+      link: jssdkConfig.link,
+      imgUrl: jssdkConfig.imgUrl,
+      success: jssdkConfig.success,
+      cancel: jssdkConfig.cancel
+    });
+    wx.onMenuShareWeibo({
+      title: jssdkConfig.title,
+      desc: jssdkConfig.desc,
+      link: jssdkConfig.link,
+      imgUrl: jssdkConfig.imgUrl,
+      success: jssdkConfig.success,
+      cancel: jssdkConfig.cancel
+    });
+  })
+}
+
+
+//详情按钮点击事件
+function detials(ele) {
+  console.log('123')
+  scrollTop = getScrollTop();
+  var id = $(ele).attr('data-id');
+  var uri = $(ele).attr('data-uri');
+  var entryeField = $(ele).attr('data-entryeField');
+  layerPc.open({
+    id: "detialsPopup",
+    skin: "detialsPopup-class",
+    type: 1,
+    scrollbar: false,
+    resize: false,
+    anim: 2,
+    title: false,
+    shade: [1, '#fff'],
+    closeBtn: 0,
+    area: ['100%', '100%'],
+    btn: ['加载中...', '返回'],
+    content: $('#detials'),
+    success: function (index, layero) {
+      $('.index').hide();
+      $('body .detialsPopup-class .layui-layer-btn0').addClass('enteredBtn-state-ok').text('去学习');
+    },
+    yes: function (index, layero) {
+      linkUri(uri);
+    },
+    btn2: function (index, layero) {
+      layer.close(index);
+      $('.index').show();
+      to(scrollTop);
+      //清空详情
+      $('.detials #detials-title').text('加载中...');
+      $('.detials #detials-startTime').text('');
+      $('.detials #detials-endTime').text('');
+      $('.detials #detials-num').text('');
+      $('.detials #list-item-state').text('加载中...');
+    },
+    end: function () {
+      $('#detials').hide();
+    }
+  });
+  var id = $(ele).attr('data-id');
+  getDetials(id);
+};
+
+// 详情页面
+function getDetials(id) {
+  let data = {
+    '_url': '/common-api/course?id=' + id
+  };
+  request('GET', data, true,
+    function (res) {
+      requestCallBack(res, {
+        success: function (res) {
+          $('.detials #detials-title').text(res.result.title);
+          // $('.detials #detials-banner').empty();
+          // $.each(res.result.cover, function (i, v) {
+          //   var html = ' <div class="detials-banner" style="background-image:url(' + v + ')" src="' + v + '" onclick=showImg(this)></div>';
+          //   $('.detials #detials-banner').append(html);
+          // });
+          $('.detials #detials-banner').css({
+            "background": 'url(' + res.result.cover + ') no-repeat center top',
+            "background-size": "cover"
+          }).attr({
+            'onclick': 'showImg(this)',
+            'src': res.result.cover
+          });
+          $('.detials #detials-startTime').text('开始时间：' + res.result.startTime);
+          $('.detials #detials-endTime').text('结束时间：' + res.result.endTime);
+          $('.detials #detials-num').text('学习人数：' + res.result.users);
+          $('.detials #list-item-state').text(res.result.type);
+        },
+        error: function (res) {
+          if (res.status == 403) {
+            getAccessToken();
+            return;
+          } else {
+            $('#loadingWrapper').hide();
+            layerPc.msg(res.message, {
+              icon: 2
+            });
+          }
+        }
+      });
+    })
+};
+
+//固定块
+function setFixbar() {
+  util.fixbar({
+    bar1: false,
+    css: {
+      'right': '2vw'
+    }
+  });
+};
